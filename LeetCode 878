@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int nthMagicalNumber(long n, int a, int b) {
+        long l = 0;
+        long r = n * min(a, b);
+        long ans = 0;
+        long lc = lcm(a, b);
+        while(l <= r){     //binary search
+            long m = l + (r - l) / 2;
+            if(m / a + m / b - m / lc >= n){
+                ans = m;
+                r = m - 1;
+            }else{
+                l = m + 1;
+            }
+        }
+        return int(ans % 1000000007);
+    }
+};
+
+long gcd(long a, long b){     //最大公约数
+    return b == 0? a : gcd(b, a % b);
+}
+ 
+long lcm(long a, long b){    //最大公倍数
+    return a / gcd(a, b) * b;
+}
