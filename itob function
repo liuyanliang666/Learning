@@ -1,0 +1,18 @@
+void itob(int n, string s, int b){    //将n转换成b进制
+    int tmp;
+    tmp = abs(n);  
+    while(tmp > 0){
+        if(b > 10 && (tmp % b) >= 10){
+            s += char('A' + (tmp % b) - 10);
+        }
+        else{
+            s += char('0' + (tmp % b));
+        }
+        tmp /= b;
+    }
+    if(n < 0){    // when n is negative
+        s += '-';
+    }
+    reverse(s.begin() ,s.end());
+    cout << s ;
+}
