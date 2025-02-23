@@ -1,0 +1,20 @@
+int word_num(string s){
+    int ans = 0;
+    for(char c : s){
+        ans |= (1 << (c - 'a'));
+    }
+    return ans;
+}
+class Solution {
+public:
+    int similarPairs(vector<string>& words) {
+        int ans = 0;
+        unordered_map<int, int> res;
+        for(string i : words){
+            int tmp = word_num(i);
+            ans += res[tmp];
+            res[tmp]++;
+        }
+        return ans;
+    }
+};
