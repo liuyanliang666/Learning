@@ -1,0 +1,67 @@
+int fib1(int n){    //  暴力递归
+    if(n == 1){
+        return 0;
+    }
+    if(n == 2){
+        return 1;
+    }else{
+        return fib1(n - 1) + fib1(n - 2);
+    }
+}
+
+int f(int n, int* p){   //  记忆化搜索
+    if(n == 0){
+        return 0;
+    }
+    else if(n == 1){
+        return 1;
+    }
+    if(p[n] != -1){
+        return p[n];
+    }
+    int ans = f(n - 1, p) + f(n - 2, p);
+    p[n] = ans;
+    return ans;
+}
+
+int fib2(int n){
+    int *p =new int [n + 1];
+    for(int i = 0; i <= n; i++){
+        p[i] = -1;
+    }
+    return f(n, p);
+}
+
+int fib3(int n){   //  自底向上的动态规划
+    if(n == 0){
+        return 0;
+    }
+    else if(n == 1){
+        return 1;
+    }
+    int *p = new int[n + 1];
+    p[0] = 0;
+    p[1] = 1;
+    for(int i = 2; i <= n; i++){
+        p[i] = p[i - 1] + p[i - 2];
+    }
+    return p[n];
+}
+
+int fib4(int n){    //  只需要常数级别的额外空间，最优解！！
+    int ll = 0;
+    int l =1;
+    int tmp = 0;
+    if(n == 0){
+        return 0;
+    }
+    else if(n == 1){
+        return 1;
+    }
+    for(int i = 2; i <= n; i++){
+        tmp = ll + l;
+        ll = l;
+        l = tmp;
+    }
+    return l;
+}
