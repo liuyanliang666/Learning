@@ -1,0 +1,25 @@
+Polynomial Polynomial::derivative(){  // pay attention to the node whose e == 0 !!!
+    if(head == nullptr){
+        return *this;
+    }
+    if(head->e == 0){
+        head = nullptr;
+        return *this;
+    }
+    node* p = head;
+    while(p->next != nullptr){
+        if(p->next->e == 0){
+            node* tmp = p->next;
+            p->next = p->next->next;
+            delete tmp;
+        }
+        else{
+            p->c = ((p->c) * (p->e));
+            p->e -= 1;
+            p = p->next;
+    }
+    }
+    p->c = ((p->c) * (p->e));
+    p->e -= 1;
+    return *this;
+}
