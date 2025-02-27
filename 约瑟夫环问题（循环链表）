@@ -1,0 +1,167 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+using std::cin;
+using std::cout;
+using std::endl;
+#define NIL nullptr
+
+typedef int ElemType;
+
+typedef struct ListNode *Position;  // 指针即结点位置
+struct ListNode {
+    ElemType data_;   // 存储数据
+    Position next_;  // 线性表中下一个元素的位置
+};
+class LinkedList {
+private:
+    Position head_;  // 单链表头指针,指向空头结点
+    int length_;    // 表长
+public:
+    struct ListException   // 异常处理
+    {
+        std::string error_;
+        ListException(std::string s) :error_(s) {};
+    };
+    LinkedList();  // 构造函数，初始化一个空的线性表
+    ~LinkedList();  // 析构函数,释放线性表占用的空间
+    LinkedList(const LinkedList&); // 拷贝构造函数
+    LinkedList& operator=(const LinkedList&);  // 赋值运算符重载
+    int Josephus(const int& n, const int& m, const int& k);  // 约瑟夫问题
+};
+
+LinkedList:: LinkedList(){
+    head_ = nullptr;
+    length_ = 0;
+}
+
+LinkedList:: ~LinkedList(){
+    if(head_ != nullptr){
+        if(head_->next_ == head_){  // there is only 1 element in the linkedlist
+            delete head_;
+            head_ = nullptr;
+        }else{
+            ListNode* p = head_->next_;
+            while(p != head_){
+                ListNode* tmp = p->next_;
+                delete p;
+                p = tmp;
+            }
+            delete head_;
+            head_ = nullptr;
+        }
+    }
+}
+
+LinkedList:: LinkedList(const LinkedList& list){
+    if(list.head_ == nullptr){  // when the linkedlist is empty
+        length_ = 0;
+        head_ = nullptr;
+        return;
+    }
+    length_ = list.length_;
+    ListNode* tmp = list.head_;
+    head_ = new ListNode{tmp->data_, nullptr};
+    tmp = tmp->next_;
+    ListNode* p = head_;
+    while(tmp != list.head_ && tmp != nullptr){
+        p->next_ = new ListNode{tmp->data_, nullptr};
+        tmp = tmp->next_;
+        p = p->next_;
+    }
+    p->next_ = head_;
+}
+
+LinkedList& LinkedList::operator=(const LinkedList& list){
+    if(&list != this){
+        if(head_ != nullptr){
+            if(head_->next_ == head_){  // there is only 1 element in the linkedlist
+                delete head_;
+                head_ = nullptr;
+            }else{
+                ListNode* p = head_->next_;
+                while(p != head_){
+                    ListNode* tmp = p->next_;
+                    delete p;
+                    p = tmp;
+                }
+                delete head_;
+                head_ = nullptr;
+            }
+        }
+    }
+    if(list.head_ == nullptr){
+        length_ = 0;
+        head_ = nullptr;
+        return *this;
+    }
+    length_ = list.length_;
+    ListNode* tmp = list.head_;
+    head_ = new ListNode{tmp->data_, nullptr};
+    tmp = tmp->next_;
+    ListNode* p = head_;
+    while(tmp != list.head_){
+        p->next_ = new ListNode{tmp->data_, nullptr};
+        tmp = tmp->next_;
+        p = p->next_;
+    }
+    p->next_ = head_;
+    return *this;
+}
+
+int LinkedList::Josephus(const int& n, const int& m, const int& k){
+    if(n == 0){   // when the linkedlist is empty
+        return -1;
+    }
+    length_ = n;
+    head_ = new ListNode{1, nullptr};
+    ListNode* p = head_;
+    for(int i = 2; i <= n; i++){
+        p->next_ = new ListNode{i, nullptr};
+        p = p->next_;
+    }
+    p->next_ = head_;
+    int cnt = 1;
+    // p = head_;
+    while(length_ > n - k + 1){
+        if(m == 1){
+            return k;
+        }
+        else{
+            while(cnt < m - 1){
+                head_ = head_->next_;
+                cnt++;
+            }
+        }
+        ListNode* del = head_->next_;
+        length_--;
+        head_->next_ = del->next_;
+        delete del;
+        head_ = head_->next_;
+        cnt = 1;
+    }
+    while(cnt < m - 1){
+        head_ = head_->next_;
+        cnt++;
+    }
+    return head_->next_->data_;
+}
+/*LinkedList 定义*/
+int main()
+{
+    int t;
+    cin >> t;
+    while(t--)
+    {
+        int n, m, k;
+        LinkedList list;
+        cin >> n >> m >> k;
+        int ans = list.Josephus(n, m, k);
+        cout << ans << endl;
+        LinkedList list2(list);
+        LinkedList list3;
+        list3 = list2;
+    }
+    return 0;
+}
