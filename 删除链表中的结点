@@ -14,7 +14,7 @@ public:
         if(head == nullptr){   // 如果初始链表为空
             return head;
         }
-        while(head != nullptr && head->val == val){
+        while(head != nullptr && head->val == val){   // 注意是whlle而不是if，要一直删到第一个结点满足要求为止
             ListNode* tmp = head->next;
             delete head;
             head = tmp;
