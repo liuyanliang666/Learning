@@ -14,6 +14,10 @@ public:
         if(head == nullptr){   // 如果初始链表为空
             return head;
         }
+        
+        //ListNode* dummyHead = new ListNode(0); // 设置一个虚拟头结点
+        //dummyHead->next = head; // 将虚拟头结点指向head，这样方便后面做删除操作
+        
         while(head != nullptr && head->val == val){   // 注意是whlle而不是if，要一直删到第一个结点满足要求为止
             ListNode* tmp = head->next;
             delete head;
