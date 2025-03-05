@@ -1,0 +1,94 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+typedef enum { element, sublist } ElemTag; /* 结点标记类型 */
+typedef struct node
+{
+    ElemTag tag; /* 结点标记 */
+    union  // 某一时间点只存储一个数据
+    {
+        struct node *dlink; //子表
+        char data; //原子数据
+    };
+    struct node *next ; /* 指向线性表中下一个结点*/
+}GNODE;
+
+GNODE* create(string s, int* i,int slen){
+        //创建广义表，注意表头有个指向第一个元素的临时结点
+        GNODE* head = new GNODE;
+        head->next = NULL;
+        GNODE* p = head, *q;
+        for(;*i < slen; (*i)++){
+            if(isalpha(s[*i])){ //当前扫描的是字符数据，创建原子结点
+                q = new GNODE;
+                q->tag = element;
+                q->data = s[*i];
+                q->next = NULL;
+                p->next = q;
+                p = q;
+            }
+            else if(s[*i] == '('){ //当前扫描的是(, 则创建子表的表头结点
+                q = new GNODE;
+                q->tag = sublist;
+                (*i)++;
+                q->dlink = create(s,i,slen); //递归创建子表中每个结点
+                q->next = NULL;
+                p->next = q;
+                p = q;
+            }
+            else if(s[*i] == ')'){  // 结束创建子表
+                break;
+            }
+        }
+        return head->next;
+}
+
+GNODE *Gcreate(string s){
+    //创建广义表，字符串格式为(a(bc)),((a(bc))(a(bc)))
+    GNODE * head, *p;
+    int slen = s.size();
+    int i = 0;
+    head = create(s, &i, slen);
+    p = head; head = head->dlink; //因为最外面有括号，所以真实的广义表在head的dlink中，所以需要删除临时头结点
+    delete p;
+    return head;
+}
+
+void print(GNODE *head) //输出广义表
+{
+    if(head != NULL){
+        if(head->tag == element) {
+            cout<< head->data; print(head->next);
+        }
+        else {
+            cout << "(" ; print(head->dlink); cout << ")" ;
+            print(head->next);
+        }
+    }
+}
+
+int main()
+{
+    //创建一个(a(bc))广义表
+    // GNODE * headD = NULL;
+    // headD = new GNODE;
+    // headD->tag = element;
+    // headD->data = 'a';
+    // headD->next = NULL;
+    // GNODE *p = new GNODE;
+    // p->tag = sublist; p->next = NULL; p->dlink = NULL;
+    // headD->next = p;
+    // GNODE *q = new GNODE;
+    // q->tag = element; q->data = 'b'; q->next = NULL;
+    // p->dlink = q;
+    // p = q;
+    // q = new GNODE;
+    // q->tag = element; q->data = 'c'; q->next = NULL;
+    // p->next = q;
+    // print(headD);
+    
+    GNODE* head = Gcreate("(a(bc))");
+    print(head);
+    return 0;
+}
