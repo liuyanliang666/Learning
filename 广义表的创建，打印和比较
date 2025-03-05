@@ -68,6 +68,25 @@ void print(GNODE *head) //输出广义表
     }
 }
 
+bool equal(GNODE *p1,GNODE *p2) //判断两个广义表是否相等
+{
+    bool flag = false;
+    if(p1 == NULL && p2 == NULL) return true; // 两个广义表均为空
+    if(p1 != NULL && p2 != NULL){
+        if(p1->tag == p2->tag){ //对应结点的标签相同
+            if(p1->tag == element){
+                if(p1->data == p2->data) flag = true;
+                else flag = false;
+            }
+            else {
+                flag = equal(p1->dlink,p2->dlink);  // 比较子表
+            }
+            if(flag) return equal(p1->next,p2->next); // 继续比较广义表中下一个结点
+        }
+    }
+    return flag;
+}
+
 int main()
 {
     //创建一个(a(bc))广义表
