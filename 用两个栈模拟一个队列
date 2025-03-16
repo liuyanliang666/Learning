@@ -1,0 +1,59 @@
+#include <iostream>
+#include <string>
+#include <stack>
+#include <sstream>
+#include <limits>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;  // 共有n条指令
+    cin.ignore();
+    stack<int> s1, s2;
+    while(n--){
+        string line;
+        getline(cin, line);
+        stringstream sstream(line);
+        string cmd, data;
+        sstream >> cmd;
+        if(cmd == "push"){  // 入队操作
+            sstream >> data;
+            s1.push(stoi(data));
+            continue;
+        }
+        else if(cmd == "pop"){
+            if(s2.empty()){
+                while(!s1.empty()){
+                    s2.push(s1.top());  // 将s1中的元素依次移入s2中
+                    s1.pop();
+                }
+            }
+            s2.pop();
+            continue;
+        }
+        else if(cmd == "query"){
+            sstream >> data;
+            if(data == "1"){
+                if(!s2.empty()){
+                    cout << s2.top() << endl;
+                    continue;
+                }
+                else if(s2.empty() && !s1.empty()){
+                    while(!s1.empty()){
+                        s2.push(s1.top());  // 将s2中的元素依次移入s1中
+                        s1.pop();
+                    }
+                    cout << s2.top() << endl;
+                    continue;
+                }
+            }
+            else if(data == "2"){
+                int size1 = s1.size();
+                int size2 = s2.size();
+                cout << min(size1, size2) << ' ' << max(size1, size2) << endl;
+                continue;
+            }
+        }
+    }
+    return 0;
+}
