@@ -1,0 +1,49 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+vector<int> getNext(string& pattern){  // 构建next数组
+    if(pattern.size() == 1){
+        return {-1};
+    }
+    if(pattern.size() == 2){
+        return {-1, 0};
+    }
+    vector<int> next = {-1, 0};
+    for(int i = 2; i < pattern.size(); i++){  // 利用next[i - 1]求next[i]
+        int index = next[i - 1];
+        while(pattern[i - 1] != pattern[index] && index != -1){
+            index = next[index];
+        }
+        next.push_back(index + 1);
+    }
+    return next;
+}
+int main(){
+    string haystack, needle;
+    cin >> haystack >> needle;
+    if(haystack.size() < needle.size()){
+        return -1;
+    }
+    vector<int> next = getNext(needle);
+    int i = 0, j = 0;
+    int pos = -1;
+    int m = haystack.size();
+    int n = needle.size();
+    while((i < m) && (j < n)){
+        if(j  == -1){
+            i += 1;
+            j = 0;
+        }
+        else if(haystack[i] == needle[j]){
+            i += 1;
+            j += 1;
+        } 
+        else{
+            j = next[j];
+        }
+    }
+    if(j == n){  // 匹配成功
+        pos = i - n;
+    }
+    cout << pos;
+}
