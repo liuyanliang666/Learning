@@ -11,7 +11,7 @@ vector<int> getNext(string& pattern){  // 构建next数组
     vector<int> next = {-1, 0};
     for(int i = 2; i < pattern.size(); i++){  // 利用next[i - 1]求next[i]
         int index = next[i - 1];
-        while(pattern[i - 1] != pattern[index] && index != -1){
+        while(index != -1 && pattern[i - 1] != pattern[index]){
             index = next[index];
         }
         next.push_back(index + 1);
