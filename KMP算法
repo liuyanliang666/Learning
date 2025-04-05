@@ -5,9 +5,6 @@ vector<int> getNext(string& pattern){  // 构建next数组
     if(pattern.size() == 1){
         return {-1};
     }
-    if(pattern.size() == 2){
-        return {-1, 0};
-    }
     vector<int> next = {-1, 0};
     for(int i = 2; i < pattern.size(); i++){  // 利用next[i - 1]求next[i]
         int index = next[i - 1];
