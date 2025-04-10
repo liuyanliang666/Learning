@@ -1,0 +1,23 @@
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        queue<TreeNode*> q;
+        vector<vector<int>> res;
+        if(root != nullptr){  // 如果传入的是个空树
+            q.push(root);
+        }
+        while(!q.empty()){
+            int size = q.size();  // 每一次q的大小就是该层含有的节点个数
+            vector<int> level;
+            for(int i = 0; i < size; i++){
+                TreeNode* tmp = q.front();
+                level.push_back(tmp->val);
+                q.pop();
+                if(tmp->left) q.push(tmp->left);
+                if(tmp->right) q.push(tmp->right);
+            }
+            res.push_back(level);
+        }
+        return res;
+    }
+};
