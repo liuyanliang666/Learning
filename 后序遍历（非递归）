@@ -1,0 +1,18 @@
+void BinaryTree::NoRecursion_Post_Order(BiNODE* node) {
+    if (node) {
+        stack<BiNODE*> s1;
+        stack<BiNODE*> s2;
+        s1.push(node);
+        while (!s1.empty()) {
+            BiNODE* tmp = s1.top();
+            s1.pop();
+            s2.push(tmp);
+            if (tmp->lchild) s1.push(tmp->lchild);
+            if (tmp->rchild) s1.push(tmp->rchild);
+        }
+        while (!s2.empty()) {
+            cout << s2.top()->data << ' ';
+            s2.pop();
+        }
+    }
+}
