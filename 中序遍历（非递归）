@@ -1,0 +1,14 @@
+void BinaryTree::NoRecursion_In_Order(BiNODE* node) {
+    stack<BiNODE*> s;
+    BiNODE* cur = node;
+    while (!s.empty() || cur) {
+        while (cur) {
+            s.push(cur);
+            cur = cur->lchild;
+        }
+        cur = s.top();
+        s.pop();
+        cout << cur->data << ' ';
+        cur = cur->rchild;
+    }
+}
