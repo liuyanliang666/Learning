@@ -9,7 +9,7 @@ bool BinaryTree::Is_Full_Tree(BiNODE*) {
             q.push(tmp->lchild);
             q.push(tmp->rchild);
         }
-        else if ((!tmp->lchild && tmp->rchild) || (tmp->lchild && !tmp->rchild)) {
+        else if ((!tmp->lchild && tmp->rchild) || (tmp->lchild && !tmp->rchild)) {  // 只有一个子树的情况，返回false
             return false;
         }
     }
