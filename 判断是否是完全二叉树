@@ -1,0 +1,19 @@
+bool BinaryTree::Is_Complete_Tree(BiNODE* root) {
+    if (!root) return true;
+    queue<BiNODE*> q;
+    q.push(root);
+    bool flag = false;  // 用于标记有没有遍历到空节点
+    while (!q.empty()) {
+        BiNODE* tmp = q.front();
+        q.pop();
+        if (!tmp) {
+            flag = true;
+        }
+        else {
+            if (flag) return false;
+            q.push(tmp->lchild);
+            q.push(tmp->rchild);
+        }
+    }
+    return true;
+}
