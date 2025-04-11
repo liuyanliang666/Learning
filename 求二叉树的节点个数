@@ -1,0 +1,20 @@
+int BinaryTree::Size_Of_Tree(BiNODE* node) {
+    int cnt = 0;
+    if (node) {
+        queue<BiNODE*> q;
+        q.push(node);
+        cnt++;
+        while (!q.empty()) {
+            if (q.front()->lchild) {
+                q.push(q.front()->lchild);
+                cnt++;
+            }
+            if (q.front()->rchild) {
+                q.push(q.front()->rchild);
+                cnt++;
+            }
+            q.pop();
+        }
+    }
+    return cnt;
+}
