@@ -1,0 +1,7 @@
+void BinaryTree::Recursion_Pre_Order(BiNODE* node) {
+    if (node) {
+        cout << node->data << ' ';
+        Recursion_Pre_Order(node->lchild);
+        Recursion_Pre_Order(node->rchild);
+    }
+}
