@@ -1,0 +1,17 @@
+bool BinaryTree::Is_Full_Tree(BiNODE*) {
+    if (!root) return true;
+    queue<BiNODE*> q;
+    q.push(root);
+    while (!q.empty()) {
+        BiNODE* tmp = q.front();
+        q.pop();
+        if (tmp->lchild && tmp->rchild) {
+            q.push(tmp->lchild);
+            q.push(tmp->rchild);
+        }
+        else if ((!tmp->lchild && tmp->rchild) || (tmp->lchild && !tmp->rchild)) {
+            return false;
+        }
+    }
+    return true;
+}
