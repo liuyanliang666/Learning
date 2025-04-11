@@ -1,0 +1,8 @@
+int BinaryTree::Height_Of_Tree(BiNODE* root) {
+    if (!root) return 0;  // 空树
+    int lheight = 0;
+    int rheight = 0;
+    if (root->lchild) lheight = Height_Of_Tree(root->lchild);
+    if (root->rchild) rheight = Height_Of_Tree(root->rchild);
+    return max(lheight, rheight) + 1;
+}
