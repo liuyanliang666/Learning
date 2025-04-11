@@ -1,0 +1,5 @@
+bool BinaryTree::Is_Perfect_Tree(BiNODE* root) {
+    int height = Height_Of_Tree(root);
+    int number = Size_Of_Tree(root);
+    return (number == (pow(2, height) - 1));
+}
