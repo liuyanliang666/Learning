@@ -1,0 +1,12 @@
+void BinaryTree::Hierachicalorder(BiNODE* node) {
+    if(node){
+        queue<BiNODE*> q;
+        q.push(node);
+        while (!q.empty()) {
+            cout << q.front()->data << ' ';
+            if (q.front()->lchild) q.push(q.front()->lchild);
+            if (q.front()->rchild) q.push(q.front()->rchild);
+            q.pop();
+        }
+    }
+}
