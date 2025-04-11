@@ -1,0 +1,15 @@
+BiNODE* buildtree(vector<char>& preorder, int pos_s, int pos_e, vector<char>& inorder, int pos1, int pos2, unordered_map<char, int>& umap) {  // pos_s,pos_e表示数组的下标范围（闭区间）
+    if (pos_s > pos_e || pos1 > pos2) return nullptr;  // 空区间，返回 null
+
+    char rootv = preorder[pos_s];
+    BiNODE* root = new BiNODE{rootv};
+    if (pos_s == pos_e) return root;  // 叶子节点，直接返回，无需递归
+
+    int index = umap[rootv];  // 找到中序中的位置
+    int left_size = index - pos1;  // 找到左子树的长度
+
+    root->lchild = buildtree(preorder, pos_s + 1, pos_s + left_size, inorder, pos1, index - 1, umap);
+    root->rchild = buildtree(preorder, pos_s + left_size + 1, pos_e, inorder, index + 1, pos2, umap);
+    
+    return root;
+}
