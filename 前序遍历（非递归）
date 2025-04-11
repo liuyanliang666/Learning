@@ -1,0 +1,12 @@
+void BinaryTree::NoRecursion_Pre_Order(BiNODE* node) {
+    if(!node) return;
+    stack<BiNODE*> s;
+    s.push(node);
+    while (!s.empty()) {
+        BiNODE* root = s.top();
+        s.pop();
+        cout << root->data << ' ';
+        if (root->rchild) s.push(root->rchild);
+        if (root->lchild) s.push(root->lchild);
+    }
+}
