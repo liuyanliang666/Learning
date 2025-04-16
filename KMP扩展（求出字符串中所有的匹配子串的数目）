@@ -1,0 +1,19 @@
+int i = 0, j = 0;
+            int m = new_nums.size();
+            int n = pattern.size();
+            vector<int> next = getNext(pattern);
+            while(i < m){
+                if(j == -1 || new_nums[i] == pattern[j]){
+                    i++;
+                    j++;
+                }
+                else if(new_nums[i] != pattern[j]){
+                    j = next[j];
+                }
+
+                if(j == n){  // 计算此时字符串是否匹配
+                    cnt++;
+                    i--;  // 重要！！！否则会遗漏
+                    j = next[j - 1];
+                }
+            }
