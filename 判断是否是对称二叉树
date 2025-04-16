@@ -1,0 +1,14 @@
+bool isMirror(TreeNode* node1, TreeNode* node2){
+    if(!node1 && !node2) return 1;
+    if(node1 && !node2) return 0;
+    if(!node1 && node2) return 0;
+    return (node1->val == node2->val) && isMirror(node1->right, node2->left) && isMirror(node1->left, node2->right);
+}
+
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if(!root) return 1;
+        return isMirror(root->left, root->right);
+    }
+};
