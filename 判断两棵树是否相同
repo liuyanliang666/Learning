@@ -1,0 +1,15 @@
+class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if((!p && q) || (p && !q)){  // 一个树为空，另一个树非空就返回false
+            return false;
+        }
+        if(!p && !q){  // 如果两个树都为空，返回true
+            return true;
+        }
+        if(p->val != q->val){  // 如果两个节点值不相同，也返回false
+            return false;
+        }
+        return isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
+    }
+};
