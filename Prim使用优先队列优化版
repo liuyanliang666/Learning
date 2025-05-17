@@ -5,86 +5,43 @@
 
 using namespace std;
 
-struct Edge {
-    int to, weight;
-    Edge(int t, int w): to(t), weight(w) {}
-    bool operator<(const Edge& e) const {
-        return weight > e.weight;  // 最小堆
-    }
-};
-
-int Prim_PQ(int n, vector<vector<Edge>>& adj) {
-    vector<bool> visited(n + 1, false);
-    priority_queue<Edge> pq;
-
-    int totalCost = 0;
-    pq.push(Edge(1, 0));  // 从节点1开始
-
-    while (!pq.empty()) {
-        Edge cur = pq.top();
-        pq.pop();
-
-        if (visited[cur.to]) continue;
-
-        visited[cur.to] = true;
-        totalCost += cur.weight;
-
-        for (Edge& e : adj[cur.to]) {
-            if (!visited[e.to]) {
-                pq.push(e);
-            }
-        }
-    }
-
-    // 检查是否连通
-    for (int i = 1; i <= n; ++i) {
-        if (!visited[i]) return -1;  // 图不连通
-    }
-
-    return totalCost;
-}
-
-//输入邻接矩阵
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <climits>
-
-using namespace std;
-
 struct Node {
     int to;
     int weight;
+    int from;  // 加入来源节点
     bool operator<(const Node& other) const {
-        return weight > other.weight; // 最小堆
+        return weight > other.weight;  // 最小堆
     }
 };
 
-int PrimMatrix(int n, vector<vector<int>>& graph) {
+int PrimMatrixWithParent(int n, vector<vector<int>>& graph, vector<int>& parent) {
     vector<bool> visited(n + 1, false);
     priority_queue<Node> pq;
     int totalCost = 0;
 
-    pq.push({1, 0}); // 从节点 1 开始
+    parent.assign(n + 1, -1);
+    pq.push({1, 0, -1});  // 起点是 1，权重为 0，无父节点
 
     while (!pq.empty()) {
         Node cur = pq.top(); pq.pop();
         int u = cur.to;
         int w = cur.weight;
+        int p = cur.from;
 
         if (visited[u]) continue;
 
         visited[u] = true;
         totalCost += w;
+        parent[u] = p;
 
         for (int v = 1; v <= n; ++v) {
             if (!visited[v] && graph[u][v] != INT_MAX) {
-                pq.push({v, graph[u][v]});
+                pq.push({v, graph[u][v], u});  // 记录边的来源 u -> v
             }
         }
     }
 
-    // 检查连通性
+    // 检查是否是连通图
     for (int i = 1; i <= n; ++i) {
         if (!visited[i]) return -1;
     }
