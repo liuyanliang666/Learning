@@ -1,0 +1,29 @@
+    vector<edge> edges;
+    priority_queue<edge, vector<edge>, cmp1> pq;
+    vector<int> parent(n + 1);
+    int cost = 0;
+    for(int i = 1; i <= n; i++){
+        parent[i] = i;
+    }
+    for(int i = 0; i < m; i++){
+        int a, b, weight;
+        cin >> a >> b >> weight;
+        pq.push(edge(a, b, weight));
+    }
+    int cnt = 0;
+    while(!pq.empty()){
+        edge top = pq.top();
+        pq.pop();
+        int a = top.a;
+        int b = top.b;
+        if(find(a, parent) != find(b, parent)){
+            cost += top.weight;
+            unite(a, b, parent);
+            cnt++;
+        }
+    }
+    if(cnt == n - 1){
+        cout << cost << endl;
+    }else{
+        cout << -1 << endl;
+    }
