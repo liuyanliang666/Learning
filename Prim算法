@@ -1,0 +1,60 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int n, m;
+
+int Prim(int start, vector<bool>& visited, vector<int>& minDist, vector<vector<int>>& graph){
+    visited[start] = true;
+    minDist[start] = 0;
+    for(int i = 1; i <= n; i++){
+        if(minDist[i] > graph[start][i]){
+            minDist[i] = graph[start][i];
+        }
+    }
+
+    for(int i = 1; i < n; i++){   // 只需找到n - 1个点
+        int cur = -1;  // 用于记录当前距离最小生成树最近的结点
+        int min = INT_MAX;
+        for(int j = 1; j <= n; j++){
+            if(!visited[j] && (minDist[j] < min)){
+                cur = j;
+                min = minDist[j];
+            }
+        }
+
+        if(cur == -1){  // 图不连通，不存在最小生成树
+            return -1;
+        }
+        visited[cur] = true;  // 将距离最近的结点加入最小生成树
+
+        for(int j = 1; j <= n; j++){  // 更新minDist数组
+            if(!visited[j] && (graph[cur][j] < minDist[j])){
+                minDist[j] = graph[cur][j];
+            }
+        }
+    }
+
+    int cost = 0;
+    for(int i = 1; i <= n; i++){
+        cost += minDist[i];
+    }
+
+    return cost;
+
+}
+
+int main(){
+    cin >> n >> m;
+    vector<bool> visited(n + 1, 0);   // 用于标记结点是否在最小生成树内
+    vector<int> minDist(n + 1, INT_MAX);  // 记录各节点到最小生成树的距离
+    vector<vector<int>> graph(n + 1, vector<int>(n + 1, INT_MAX));
+    for(int i = 0; i < m; i++){
+        int a, b, dist;
+        cin >> a >> b >> dist;
+        if(graph[a][b] > dist){  // 防止出现相同的数据导致覆盖
+            graph[a][b] = dist;
+            graph[b][a] = dist;
+        }
+    }
+    cout << Prim(1, visited, minDist, graph);
+}
