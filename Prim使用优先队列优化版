@@ -5,6 +5,161 @@
 
 using namespace std;
 
+struct Edge {
+    int to, weight;
+    Edge(int t, int w): to(t), weight(w) {}
+    bool operator<(const Edge& e) const {
+        return weight > e.weight;  // 最小堆
+    }
+};
+
+int Prim_PQ(int n, vector<vector<Edge>>& adj) {
+    vector<bool> visited(n + 1, false);
+    priority_queue<Edge> pq;
+
+    int totalCost = 0;
+    pq.push(Edge(1, 0));  // 从节点1开始
+
+    while (!pq.empty()) {
+        Edge cur = pq.top();
+        pq.pop();
+
+        if (visited[cur.to]) continue;
+
+        visited[cur.to] = true;
+        totalCost += cur.weight;
+
+        for (Edge& e : adj[cur.to]) {
+            if (!visited[e.to]) {
+                pq.push(e);
+            }
+        }
+    }
+
+    // 检查是否连通
+    for (int i = 1; i <= n; ++i) {
+        if (!visited[i]) return -1;  // 图不连通
+    }
+
+    return totalCost;
+}
+
+
+
+
+
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <climits>
+using namespace std;
+
+struct Edge {
+    int from, to, weight;
+    Edge(int f, int t, int w): from(f), to(t), weight(w) {}
+    bool operator<(const Edge& e) const {
+        return weight > e.weight; // 最小堆
+    }
+};
+
+int Prim_PQ(int n, vector<vector<Edge>>& adj, vector<int>& parent) {
+    vector<bool> visited(n + 1, false);
+    priority_queue<Edge> pq;
+    int totalCost = 0;
+
+    parent.assign(n + 1, -1); // 初始化 parent 数组
+
+    pq.push(Edge(-1, 1, 0));  // 从结点1开始，from设为-1表示起点
+
+    while (!pq.empty()) {
+        Edge cur = pq.top();
+        pq.pop();
+
+        int u = cur.to;
+        if (visited[u]) continue;
+
+        visited[u] = true;
+        totalCost += cur.weight;
+        parent[u] = cur.from;
+
+        for (Edge& e : adj[u]) {
+            if (!visited[e.to]) {
+                pq.push(Edge(u, e.to, e.weight));
+            }
+        }
+    }
+
+    // 检查是否连通
+    for (int i = 1; i <= n; ++i) {
+        if (!visited[i]) return -1;
+    }
+
+    return totalCost;
+}
+
+
+
+
+
+
+
+
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <climits>
+
+using namespace std;
+
+struct Node {
+    int to;
+    int weight;
+    bool operator<(const Node& other) const {
+        return weight > other.weight; // 最小堆
+    }
+};
+
+int PrimMatrix(int n, vector<vector<int>>& graph) {
+    vector<bool> visited(n + 1, false);
+    priority_queue<Node> pq;
+    int totalCost = 0;
+
+    pq.push({1, 0}); // 从节点 1 开始
+
+    while (!pq.empty()) {
+        Node cur = pq.top(); pq.pop();
+        int u = cur.to;
+        int w = cur.weight;
+
+        if (visited[u]) continue;
+
+        visited[u] = true;
+        totalCost += w;
+
+        for (int v = 1; v <= n; ++v) {
+            if (!visited[v] && graph[u][v] != INT_MAX) {
+                pq.push({v, graph[u][v]});
+            }
+        }
+    }
+
+    // 检查连通性
+    for (int i = 1; i <= n; ++i) {
+        if (!visited[i]) return -1;
+    }
+
+    return totalCost;
+}
+
+
+
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <climits>
+
+using namespace std;
+
 struct Node {
     int to;
     int weight;
