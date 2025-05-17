@@ -43,3 +43,51 @@ int Prim_PQ(int n, vector<vector<Edge>>& adj) {
 
     return totalCost;
 }
+
+//输入邻接矩阵
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <climits>
+
+using namespace std;
+
+struct Node {
+    int to;
+    int weight;
+    bool operator<(const Node& other) const {
+        return weight > other.weight; // 最小堆
+    }
+};
+
+int PrimMatrix(int n, vector<vector<int>>& graph) {
+    vector<bool> visited(n + 1, false);
+    priority_queue<Node> pq;
+    int totalCost = 0;
+
+    pq.push({1, 0}); // 从节点 1 开始
+
+    while (!pq.empty()) {
+        Node cur = pq.top(); pq.pop();
+        int u = cur.to;
+        int w = cur.weight;
+
+        if (visited[u]) continue;
+
+        visited[u] = true;
+        totalCost += w;
+
+        for (int v = 1; v <= n; ++v) {
+            if (!visited[v] && graph[u][v] != INT_MAX) {
+                pq.push({v, graph[u][v]});
+            }
+        }
+    }
+
+    // 检查连通性
+    for (int i = 1; i <= n; ++i) {
+        if (!visited[i]) return -1;
+    }
+
+    return totalCost;
+}
