@@ -1,24 +1,11 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <climits>
-
-using namespace std;
-
-struct Edge {
-    int to, weight;
-    Edge(int t, int w): to(t), weight(w) {}
-    bool operator<(const Edge& e) const {
-        return weight > e.weight;  // 最小堆
-    }
-};
-
 int Prim_PQ(int n, vector<vector<Edge>>& adj) {
     vector<bool> visited(n + 1, false);
+    vector<int> minDist(n + 1, INT_MAX);
     priority_queue<Edge> pq;
 
     int totalCost = 0;
-    pq.push(Edge(1, 0));  // 从节点1开始
+    minDist[1] = 0;
+    pq.push(Edge(1, 0));
 
     while (!pq.empty()) {
         Edge cur = pq.top();
@@ -30,19 +17,20 @@ int Prim_PQ(int n, vector<vector<Edge>>& adj) {
         totalCost += cur.weight;
 
         for (Edge& e : adj[cur.to]) {
-            if (!visited[e.to]) {
-                pq.push(e);
+            if (!visited[e.to] && e.weight < minDist[e.to]) {
+                minDist[e.to] = e.weight;
+                pq.push(Edge(e.to, e.weight));
             }
         }
     }
 
-    // 检查是否连通
     for (int i = 1; i <= n; ++i) {
-        if (!visited[i]) return -1;  // 图不连通
+        if (!visited[i]) return -1;
     }
 
     return totalCost;
 }
+
 
 
 
