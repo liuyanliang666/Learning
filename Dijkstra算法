@@ -32,3 +32,50 @@ public:
         return ans == INT_MAX ? -1 : ans;
     }
 };
+
+
+
+//相同风格的Prim算法
+class Solution {
+public:
+    int primMST(int n, vector<vector<int>>& edges) {
+        vector<vector<pair<int, int>>> graph(n + 1);
+        for (auto& e : edges) {
+            int u = e[0], v = e[1], w = e[2];
+            graph[u].emplace_back(v, w);
+            graph[v].emplace_back(u, w);  // 因为 Prim 是无向图
+        }
+
+        vector<bool> visited(n + 1, false);
+        vector<int> minEdge(n + 1, INT_MAX);  // 到当前生成树的最短边
+        minEdge[1] = 0;  // 从结点 1 开始（也可以换成其他起点）
+
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> pq;
+        pq.emplace(0, 1);  // (边权，节点)
+
+        int totalWeight = 0;
+
+        while (!pq.empty()) {
+            auto [w, u] = pq.top();
+            pq.pop();
+
+            if (visited[u]) continue;
+            visited[u] = true;
+            totalWeight += w;
+
+            for (auto& [v, weight] : graph[u]) {
+                if (!visited[v] && weight < minEdge[v]) {
+                    minEdge[v] = weight;
+                    pq.emplace(weight, v);
+                }
+            }
+        }
+
+        // 检查是否所有节点都被访问，判断图是否连通
+        for (int i = 1; i <= n; ++i) {
+            if (!visited[i]) return -1;  // 图不连通，无法生成 MST
+        }
+
+        return totalWeight;
+    }
+};
