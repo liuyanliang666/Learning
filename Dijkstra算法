@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+        vector<vector<pair<int, int>>> graph(n + 1);
+        for (auto& v : times) {
+            graph[v[0]].emplace_back(v[1], v[2]);
+        }
+
+        vector<int> dist(n + 1, INT_MAX);  // 记录每个结点到源点的最短距离
+        vector<bool> visited(n + 1, 0);
+        dist[k] = 0;
+
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> pq;
+        pq.emplace(0, k);
+
+        while (!pq.empty()) {
+            auto [curDist, u] = pq.top();
+            pq.pop();
+
+            if (visited[u]) continue;
+            
+            visited[u] = true;
+            for (auto& [v, w] : graph[u]) {
+                if (dist[v] > curDist + w) {
+                    dist[v] = curDist + w;
+                    pq.emplace(dist[v], v);
+                }
+            }
+        }
+
+        int ans = *max_element(dist.begin() + 1, dist.end());  // 找到dist数组的最大值
+        return ans == INT_MAX ? -1 : ans;
+    }
+};
