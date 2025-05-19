@@ -14,14 +14,14 @@ public:
         pq.emplace(0, k);
 
         while (!pq.empty()) {
-            auto [curDist, u] = pq.top();
+            auto [curDist, u] = pq.top();  // curDist是当前堆中距离源点最短的距离
             pq.pop();
 
             if (visited[u]) continue;
             
             visited[u] = true;
             for (auto& [v, w] : graph[u]) {
-                if (dist[v] > curDist + w) {
+                if (!visited[v] && dist[v] > curDist + w) {
                     dist[v] = curDist + w;
                     pq.emplace(dist[v], v);
                 }
