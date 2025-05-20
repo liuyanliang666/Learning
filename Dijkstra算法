@@ -10,7 +10,7 @@ public:
         vector<bool> visited(n + 1, 0);
         dist[k] = 0;
 
-        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> pq;
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
         pq.emplace(0, k);
 
         while (!pq.empty()) {
@@ -50,7 +50,7 @@ public:
         vector<int> minEdge(n + 1, INT_MAX);  // 到当前生成树的最短边
         minEdge[1] = 0;  // 从结点 1 开始（也可以换成其他起点）
 
-        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> pq;
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
         pq.emplace(0, 1);  // (边权，节点)
 
         int totalWeight = 0;
