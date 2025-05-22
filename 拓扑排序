@@ -1,0 +1,40 @@
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        queue<int> q;
+        vector<vector<int>> adj(numCourses);
+        vector<int> degree(numCourses, 0);
+        vector<int> ans;
+        
+        for(auto p : prerequisites){
+            degree[p[0]]++;
+            adj[p[1]].emplace_back(p[0]);
+        }
+
+        int cur = -1;
+        for(int i = 0; i < numCourses; i++){  // 找到入度为0的点
+            if(degree[i] == 0){
+                cur = i;
+                q.emplace(cur);
+            }
+        }
+
+        if(cur == -1){
+            return {};
+        }
+
+        while(!q.empty()){
+            int top = q.front();
+            ans.emplace_back(top);
+            q.pop();
+            for(auto i : adj[top]){
+                degree[i]--;
+                if(degree[i] == 0){
+                    q.emplace(i);
+                }
+            }
+        }
+
+        return ans.size() == numCourses ? ans : vector<int>{};  // 一定要检查是否有局部环！！！
+    }
+};
