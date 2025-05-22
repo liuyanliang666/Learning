@@ -1,0 +1,51 @@
+class Solution {
+public:
+    int findTheCity(int n, vector<vector<int>>& edges, int distanceThreshold) {
+        vector<vector<int>> dist(n, vector<int>(n, INT_MAX));   //dist[i][j]表示从点i到点j的最短路径长度
+        
+        for(int i = 0; i < n; i++){   // 设置自身到自身的距离为0
+            for(int j = 0; j < n; j++){
+                if(i == j) dist[i][j] = 0;
+            }
+        }
+
+        for(auto v : edges){
+            int a = v[0];
+            int b = v[1];
+            int weight = v[2];
+            dist[a][b] = weight;
+            dist[b][a] = weight;
+        }
+
+        for(int k = 0; k < n; k++){
+            for(int i = 0; i < n; i++){
+                for(int j = 0; j < n; j++){
+                    if(dist[i][k] != INT_MAX && dist[k][j] != INT_MAX){
+                        dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+                    }
+                }
+            }
+        }
+
+        vector<int> cnt(n, 0);
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(i != j && dist[i][j] <= distanceThreshold){
+                    cnt[i]++;
+                }
+            }
+        }
+
+        int min = INT_MAX;
+        int ans;
+        for(int i = n - 1; i >= 0; i--){
+            cout << cnt[i] << endl;
+            if(cnt[i] < min){
+                ans = i;
+                min = cnt[i];
+            }
+        }
+
+        return ans;
+    }
+};
