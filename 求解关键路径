@@ -1,0 +1,111 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+unordered_map<string, int> umap;
+
+struct cmp {
+    bool operator()(const pair<int, int>& a, const pair<int, int>& b) const {
+        if (a.first != b.first) return a.first > b.first;
+        string str_a = to_string(a.first) + "," + to_string(a.second);
+        string str_b = to_string(b.first) + "," + to_string(b.second);
+        return umap[str_a] < umap[str_b];
+    }
+};
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    int super_source = 0;
+    int super_sink = n + 1;
+
+    vector<vector<pair<int, int>>> adj(n + 2);
+    vector<vector<pair<int, int>>> back(n + 2);
+    vector<vector<int>> graph(n + 2, vector<int>(n + 2, INT_MAX));
+    vector<int> degree(n + 2, 0), r_degree(n + 2, 0);
+    vector<int> in_deg(n + 2, 0), out_deg(n + 2, 0);
+    vector<int> e(n + 2, -1), l(n + 2, 0);
+    queue<int> q;
+    stack<pair<int, int>> st;
+    priority_queue<pair<int, int>, vector<pair<int, int>>, cmp> pq;
+
+    for (int i = 1; i <= m; ++i) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        adj[u].emplace_back(w, v);
+        back[v].emplace_back(w, u);
+        graph[u][v] = w;
+        degree[v]++;
+        r_degree[u]++;
+        in_deg[v]++;
+        out_deg[u]++;
+        st.emplace(u, v);
+        umap[to_string(u) + "," + to_string(v)] = i;
+    }
+
+    // 添加超级起点
+    for (int i = 1; i <= n; ++i) {
+        if (in_deg[i] == 0) {
+            adj[super_source].emplace_back(0, i);
+            back[i].emplace_back(0, super_source);
+            degree[i]++;
+            r_degree[super_source]++;
+        }
+        if (out_deg[i] == 0) {
+            adj[i].emplace_back(0, super_sink);
+            back[super_sink].emplace_back(0, i);
+            degree[super_sink]++;
+            r_degree[i]++;
+        }
+    }
+
+    // 拓扑排序求最早时间
+    e[super_source] = 0;
+    q.push(super_source);
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (auto& p : adj[u]) {
+            int v = p.second, w = p.first;
+            e[v] = max(e[v], e[u] + w);
+            if (--degree[v] == 0) q.push(v);
+        }
+    }
+
+    // 检查是否有回路（未能访问到所有点）
+    for (int i = 0; i <= super_sink; ++i) {
+        if (degree[i] > 0) {
+            cout << 0 << endl;
+            return 0;
+        }
+    }
+
+    // 最晚时间初始化
+    for (int i = 0; i <= super_sink; ++i) l[i] = e[super_sink];
+
+    q.push(super_sink);
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (auto& p : back[u]) {
+            int v = p.second, w = p.first;
+            l[v] = min(l[v], l[u] - w);
+            if (--r_degree[v] == 0) q.push(v);
+        }
+    }
+
+    // 输出结果
+    cout << e[super_sink] << endl;
+
+    while (!st.empty()) {
+        auto [u, v] = st.top(); st.pop();
+        if (e[u] == l[v] - graph[u][v]) {
+            pq.emplace(u, v);
+        }
+    }
+
+    while (!pq.empty()) {
+        auto [u, v] = pq.top(); pq.pop();
+        if (u != super_source && v != super_sink) {
+            cout << u << "->" << v << endl;
+        }
+    }
+    return 0;
+}
