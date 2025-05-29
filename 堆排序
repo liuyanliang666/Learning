@@ -1,0 +1,43 @@
+#include <iostream>
+#include <vector>
+#include <algorithm> // for std::swap
+
+// 下滤操作：维护以 root 为根的子树为大顶堆
+void siftdown(std::vector<int>& heap, int root, int size) {
+    while (2 * root + 1 < size) {
+        int child = 2 * root + 1;
+        if (child + 1 < size && heap[child] < heap[child + 1]) {
+            child++;
+        }
+        if (heap[root] < heap[child]) {
+            std::swap(heap[root], heap[child]);
+            root = child;
+        } else {
+            break;
+        }
+    }
+}
+
+// 构建大顶堆
+void buildHeap(std::vector<int>& heap) {
+    int n = heap.size();
+    for (int i = n / 2 - 1; i >= 0; --i) {
+        siftdown(heap, i, n);
+    }
+}
+
+int main() {
+    std::vector<int> data = {4, 10, 3, 5, 1};
+
+    std::cout << "原始数组: ";
+    for (int x : data) std::cout << x << " ";
+    std::cout << "\n";
+
+    buildHeap(data);
+
+    std::cout << "构建大顶堆后: ";
+    for (int x : data) std::cout << x << " ";
+    std::cout << "\n";
+
+    return 0;
+}
