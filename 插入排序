@@ -1,0 +1,11 @@
+void insertion_sort(vector<int>& arr){
+    int n = arr.size();
+    for(int i = 1; i < n; i++){
+        int key = arr[i];   // 待插入的元素
+        auto pos = upper_bound(arr.begin(), arr.begin() + i, key);  // 找到插入位置
+        for(auto it = arr.begin() + i; it != pos; it--){
+            *it = *(it - 1);
+        }  
+        *pos = key;
+    }
+}
