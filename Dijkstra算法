@@ -47,8 +47,8 @@ public:
         }
 
         vector<bool> visited(n + 1, false);
-        vector<int> minEdge(n + 1, INT_MAX);  // 到当前生成树的最短边
-        minEdge[1] = 0;  // 从结点 1 开始（也可以换成其他起点）
+        vector<int> dist(n + 1, INT_MAX);  // 到当前生成树的最短边
+        dist[1] = 0;  // 从结点 1 开始（也可以换成其他起点）
 
         priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
         pq.emplace(0, 1);  // (边权，节点)
@@ -64,8 +64,8 @@ public:
             totalWeight += w;
 
             for (auto& [v, weight] : graph[u]) {
-                if (!visited[v] && weight < minEdge[v]) {
-                    minEdge[v] = weight;
+                if (!visited[v] && weight < dist[v]) {
+                    dist[v] = weight;
                     pq.emplace(weight, v);
                 }
             }
