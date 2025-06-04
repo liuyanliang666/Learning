@@ -1,0 +1,171 @@
+#include<bits./stdc++.h>
+using namespace std;
+
+void insertion_sort(vector<int>& arr){
+    int n = arr.size();
+    for(int i = 1; i < n; i++){
+        int key = arr[i];   // 待插入的元素
+        auto pos = upper_bound(arr.begin(), arr.begin() + i, key);  // 找到插入位置
+        for(auto it = arr.begin() + i; it != pos; it--){
+            *it = *(it - 1);
+        }  
+        *pos = key;
+    }
+}
+
+void shell_sort(vector<int>& arr) {
+    int n = arr.size();
+
+    // 初始 gap 为 n/2，逐步缩小到 1
+    for (int gap = n / 2; gap > 0; gap /= 2) {
+        // 对每个子序列进行插入排序（步长为 gap）
+        for (int i = gap; i < n; ++i) {
+            int temp = arr[i];
+            int j = i;
+            // 插入排序逻辑：将 temp 插入前面 gap 间隔的有序子序列
+            while (j >= gap && arr[j - gap] > temp) {
+                arr[j] = arr[j - gap];
+                j -= gap;
+            }
+            arr[j] = temp;
+        }
+    }
+}
+
+void selection_sort(vector<int>& arr){
+    for(int i = 0; i < arr.size(); i++){
+        auto min = min_element(arr.begin() + i, arr.end());
+        swap(arr[i], *min);
+    }
+}
+
+void siftdown(vector<int>& heap, int root, int size) {
+    while (2 * root + 1 < size) {
+        int child = 2 * root + 1;
+        if (child + 1 < size && heap[child] < heap[child + 1]) {
+            child++;  // 找到左右节点中的最大值
+        }
+        if (heap[root] < heap[child]) {
+            swap(heap[root], heap[child]);
+            root = child;
+        } else {
+            break;
+        }
+    }
+}
+
+// 构建大顶堆
+void buildHeap(vector<int>& heap) {
+    int n = heap.size();
+    for (int i = n / 2 - 1; i >= 0; --i) {
+        siftdown(heap, i, n);
+    }
+}
+
+void heap_sort(vector<int>& v, int n){
+    buildHeap(v);
+    for(int m = n - 1; m > 0; m--){
+        swap(v[0], v[m]);
+        siftdown(v, 0, m);
+    }
+}
+
+void bubble_sort1(vector<int>& v){
+    int n = v.size();
+    for(int i = 0; i < n; i++){
+        for(int j = n - 2; j >= i; j--){
+            if(v[j] > v[j + 1]){
+                swap(v[j], v[j + 1]);
+            }
+        }
+    }
+}
+
+void bubble_sort2(vector<int>& v){
+    int n = v.size();
+    for(int i = 0; i < n; i++){
+        bool swapped = false;
+        for(int j = n - 2; j >= i; j--){
+            if(v[j] > v[j + 1]){
+                swap(v[j], v[j + 1]);
+                swapped = true;
+            }
+        }
+        if(!swapped){
+            break;
+        }
+    }
+}
+
+void bubble_sort3(vector<int>& v){
+    int n = v.size();
+    int boundary = 0;   // [boundary,…)为未排序的部分
+    while(boundary < n){
+        int lastSwap = n - 1;
+        for(int i = n - 2; i >= boundary; i--){
+            if(v[i] > v[i + 1]){
+                swap(v[i], v[i + 1]);
+                lastSwap = i;
+            }
+        }
+        boundary = lastSwap + 1;
+    } 
+}
+
+void quick_sort1(vector<int>& v, int l, int r){
+    if(l >= r){
+        return;
+    }
+    int last = l;
+    int n = v.size();
+    int mid = (l + r) / 2;
+    int pivot = v[mid];
+    swap(v[l], v[mid]);  // 将基准元素移至开头
+    for(int i = l + 1; i <= r; i++){
+        if(v[i] < pivot){
+            swap(v[++last], v[i]);
+        }
+    }
+    swap(v[l], v[last]);
+    quick_sort1(v, l, last - 1);
+    quick_sort1(v, last + 1, r);
+}
+
+void quick_sort2(vector<int>& v, int l, int r) {
+    if (l >= r) return;
+
+    int mid = (l + r) / 2;
+    int pivot = v[mid];
+
+    // 将 pivot 移动到最左边，防止它在处理中被覆盖
+    swap(v[l], v[mid]);
+
+    int i = l, j = r;
+
+    while (i < j) {
+        // 从右向左找小于 pivot 的元素
+        while (i < j && v[j] >= pivot) j--;
+        if (i < j) v[i++] = v[j];
+
+        // 从左向右找大于 pivot 的元素
+        while (i < j && v[i] <= pivot) i++;
+        if (i < j) v[j--] = v[i];
+    }
+
+    v[i] = pivot;  // 此时i等于j
+
+    // 递归左右子区间
+    quick_sort2(v, l, i - 1);
+    quick_sort2(v, i + 1, r);
+}
+
+
+
+
+int main(){
+    vector<int> arr = {1,4,6,3,2,5};
+    selection_sort(arr);
+    for(auto i : arr){
+        cout << i << ' ';
+    }
+}
