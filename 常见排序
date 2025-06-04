@@ -62,6 +62,13 @@ void buildHeap(vector<int>& heap) {
     }
 }
 
+void swim(vector<int>& arr, int k) {  // 从下往上调整堆
+    while(k > 0 && arr[k] > arr[(k - 1) / 2]){
+        swap(arr[k], arr[(k - 1) / 2]);
+        k = (k - 1) / 2;
+    }
+}
+
 void heap_sort(vector<int>& v, int n){
     buildHeap(v);
     for(int m = n - 1; m > 0; m--){
