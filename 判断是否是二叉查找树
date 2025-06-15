@@ -1,0 +1,26 @@
+bool is_searchTree(treenode* root) {
+    if (!root) {
+        return true; // 空树是 BST
+    }
+
+    stack<treenode*> s;
+    treenode* cur = root;
+    int prev_val = INT_MIN; // 将prev_val初始化为最小值，防止判断错误
+
+    while (!s.empty() || cur) {
+        while (cur) {   // 找到最左边的结点
+            s.push(cur);
+            cur = cur->left;
+        }
+        cur = s.top();
+        s.pop();
+        if (cur->data <= prev_val) {
+            return false; // 当前节点值小于等于前一个，不是BST
+        }
+        prev_val = cur->data; // 更新前一个节点的值
+        // 转向右子树
+        cur = cur->right;
+    }
+
+    return true;
+}
