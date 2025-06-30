@@ -1,0 +1,82 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    string str;
+    cin >> str;
+    string int_part = str;
+    string frac_part = "";
+    int pos = str.find('.');
+    if(pos != string::npos){  // 有小数点
+        int_part = str.substr(0, pos);
+        frac_part = str.substr(pos + 1);
+    }
+    //cout << int_part << ' ' << frac_part << endl;
+    long long integer_val = 0;
+    for(auto i : int_part){
+        int digit;
+        if(i == '1'){
+            digit = 1;
+        }
+        else if(i == '0'){
+            digit = 0;
+        }
+        else{
+            digit = -1;
+        }
+        integer_val = integer_val * 3 + digit;
+    }
+
+    long long frac_val = 0;
+    long long final_num = 0;
+    unsigned long long power = 1;
+    if(!frac_part.empty()){
+        int frac_length = frac_part.size();
+        for(int i = 0; i < frac_length; i++){
+            power *= 3;
+        }
+        for(auto i : frac_part){
+            int digit;
+            if(i == '1'){
+                digit = 1;
+            }
+            else if(i == '0'){
+                digit = 0;
+            }
+            else{
+                digit = -1;
+            }
+            frac_val = frac_val * 3 + digit;
+        }
+    }
+    final_num = integer_val * power + frac_val;
+    //cout << final_num << endl;
+    if(final_num == 0){
+        cout << 0;
+        return 0;
+    }
+
+    long long final_den = power;
+    long long final_int = final_num / final_den;
+    if(final_int < 0){
+        final_num = abs(final_num);
+    }
+    final_num = final_num % final_den;
+    if(final_num != 0){
+        long long common_divisor = gcd(final_num, final_den);
+        final_num /= common_divisor;
+        final_den /= common_divisor;
+    }
+
+    if(final_int != 0){
+        cout << final_int;
+        // 如果还有分数部分，则输出一个空格和分数
+        if (final_num != 0) {
+            std::cout << " " << final_num << " " << final_den;
+        }
+    }
+    // 只有分数部分
+    else {
+        cout << final_num << " " << final_den;
+    }
+}
