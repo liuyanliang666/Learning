@@ -1,0 +1,49 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    // 加上这两行可以加速C++的输入输出，对于大量数据很有用
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int n;
+    cin >> n;
+    cin.ignore(); // 消耗读取整数n后留下的换行符，防止影响 getline
+
+    for (int i = 0; i < n; i++) {
+        string line;
+        getline(cin, line);
+
+        set<string> word_set; // 使用 set 自动去重和排序
+        string current_word;
+
+        for (char c : line) {
+            // 检查当前字符是否为英文字母
+            if (isalpha(c)) {
+                // 如果是字母，则将其转为小写并追加到当前单词
+                current_word += c;
+            } else {
+                // 如果遇到非字母（空格、标点、数字等），说明一个单词结束了
+                if (!current_word.empty()) {
+                    word_set.insert(current_word);
+                    current_word = ""; // 清空，为下一个单词做准备
+                }
+            }
+        }
+        // 循环结束后，处理可能遗留在末尾的最后一个单词
+        if (!current_word.empty()) {
+            word_set.insert(current_word);
+        }
+        // --- 修改部分结束 ---
+
+        cout << "case #" << i << ':' << '\n';
+        int cnt = 0;
+        for (const auto& word : word_set) { // 使用 const auto& 提高效率
+            if (cnt > 0) cout << ' ';
+            cout << word;
+            cnt++;
+        }
+        cout << '\n';
+    }
+    return 0;
+}
