@@ -1,0 +1,37 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    string s;
+    cin >> s;
+
+    int n = s.length();
+
+    // 这个变量将保存从当前位置到末尾的最优解
+    // 它从代表 dp[n] 的空字符串开始
+    string optimal_suffix = "";
+
+    // 从后向前遍历输入字符串
+    for (int i = n - 1; i >= 0; --i) {
+        // 选择1: 不复制 s[i]
+        string choice1 = s[i] + optimal_suffix;
+
+        // 选择2: 复制 s[i]
+        string choice2 = s[i] + choice1; 
+
+        // 比较两个选择，更新 optimal_suffix 为两者中字典序较小的那个
+        if (choice1 < choice2) {
+            optimal_suffix = choice1;
+        } else {
+            optimal_suffix = choice2;
+        }
+    }
+
+    // 当循环结束时，optimal_suffix 保存的就是从位置0到末尾的最优解，即最终答案
+    cout << optimal_suffix << endl;
+
+    return 0;
+}
