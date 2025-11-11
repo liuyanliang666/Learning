@@ -6,6 +6,7 @@ int n, m;
 int Prim(int start, vector<bool>& visited, vector<int>& minDist, vector<vector<int>>& graph){
     visited[start] = true;
     minDist[start] = 0;
+    // 更新从start到其他点的最短距离
     for(int i = 1; i <= n; i++){
         if(minDist[i] > graph[start][i]){
             minDist[i] = graph[start][i];
