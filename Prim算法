@@ -13,7 +13,7 @@ int Prim(int start, vector<bool>& visited, vector<int>& minDist, vector<vector<i
         }
     }
 
-    for(int i = 1; i < n; i++){   // 只需找到n - 1个点
+    for(int i = 1; i < n; i++){   // 只需找n - 1条边
         int cur = -1;  // 用于记录当前距离最小生成树最近的结点
         int min = INT_MAX;
         for(int j = 1; j <= n; j++){
